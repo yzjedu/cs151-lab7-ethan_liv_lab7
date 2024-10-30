@@ -1,63 +1,84 @@
-# your code
+# Programmers: Ethan D'Souza & Liv Oakes
+# Course:  CS151, Dr. Zelalem Jembre Yalew
+# Due Date: 10/30/2024
+# Lab Assignment: 06
+# Problem: Creating a program that calculates the cost of buying flooring for our friend's house.
+# Purpose: Designing and programming functions, re-using other aspects of python, testing code.
+
+# Initialize flooring costs
 hardwood_cost = 1.39
 carpet_cost = 3.99
 tile_cost = 4.99
 
-# Purpose: Get a valid flooring type from the user
-# Parameters: None
-# Return: a valid flooring type as a string
-def flooring_type():
-    valid_floor_types = ['hardwood', 'carpet', 'tile']
-    while True:
-        floor_type = input('Please enter a floor type: ').lower()
-        if floor_type not in valid_floor_types:
-            input('Invalid floor type. Please try again.')
-        else:
-            return floor_type
-
-# Purpose: Calculate the cost of flooring for a room
-# Parameters: width - room width in feet, length - room length in feet, flooring_type - type of flooring
-# Return: the cost of flooring for the room as a float
-def calculate_room_cost(width, length, floor_type):
-    sqft = width * length
-    if floor_type == "hardwood":
-        return sqft * hardwood_cost
-    elif floor_type == "carpet":
-        return sqft * carpet_cost
-    else:  # tile
-        return sqft * tile_cost
-
-# Purpose: Get room details from the user and calculate its flooring cost
-# Parameters: room_number - the number of the room being processed
-# Return: the cost of flooring for the room as a float
-def process_room(room_number):
-    print(f"\nRoom {room_number}:")
-    width = float(input("Enter room width in feet: "))
-    length = float(input("Enter room length in feet: "))
-    floor_type = flooring_type()
-    cost = calculate_room_cost(width, length, flooring_type)
-    print(f"Cost for Room {room_number}: ${cost:.2f}")
-    return cost
-
-# Purpose: Main function to run the program
-# Parameters: None
-# Return: None
+# Main function
 def main():
-    total_cost = 0
-    room_count = 1
-    print('Welcome to the Room Calculator!')
-    print('\n Hardwood: $1.39/sqft \n Carpet: $3.99/sqft \n Tile : $4.99/sqft \n')
+    total_cost = 0  # Initialize total cost
+    room_number = 1  # Start with room 1
 
-    while True:
-        total_cost += process_room(room_count)
-        room_count += 1
+    # Loop 5 times (once for each room)
+    while room_number <= 5:
+        print("Processing Room " + str(room_number) + ":")
 
-        continue_input = input("\nDo you want to add another room? (yes/no): ").strip().lower()
-        if continue_input != 'yes':
-            break
+        # Call other functions to get flooring type, room dimensions, and calculate room cost
+        width, length = get_room_dimensions()
+        flooring_type = get_flooring_type()
+        room_cost = calculate_room_cost(width, length, flooring_type)
 
-    print(f"\nTotal cost for all rooms: ${total_cost:.2f}")
+        total_cost += room_cost  # Add the room cost to total cost
+
+        # Display the cost for the current room
+        print("The cost for Room " + str(room_number) + " is: $" + str(round(room_cost, 2)))
+
+        room_number += 1  # Increment room number
+
+    # After all rooms are completed, print the total cost
+    print("The total cost for all rooms is: $" + str(round(total_cost, 2)))
+
+
+# Function to get room dimensions
+def get_room_dimensions():
+    # Prompt user for length and width
+    length = input("Enter the length of the room (positive number): ")
+    width = input("Enter the width of the room (positive number): ")
+
+    # Create a loop until valid length and width are entered
+    while length == "" or width == "" or not length.isdigit() or not width.isdigit() or float(length) != 0 or float(width) != 0:
+        print("Error: Please enter valid positive numbers for both length and width.")
+        length = input("Enter the length of the room (positive number): ")
+        width = input("Enter the width of the room (positive number): ")
+
+    # Return the dimensions as floats
+    return float(length), float(width)
+
+# Function to get flooring type
+def get_flooring_type():
+    # Prompt user for flooring type
+    floor_type = input("Enter the flooring type (hardwood, carpet, tile): ").lower()
+
+    # Create a loop until a valid floor type is entered
+    while floor_type != 'hardwood' and floor_type != 'carpet' and floor_type != 'tile':
+        print("Error: Invalid flooring type. Please choose either 'hardwood', 'carpet', or 'tile'.")
+        floor_type = input("Enter the flooring type (hardwood, carpet, tile): ").lower()
+
+    # Return the valid flooring type as a string
+    return floor_type
+
+# Function to calculate room cost
+def calculate_room_cost(width, length, flooring_type):
+    # Calculate the area of the room
+    area = width * length
+
+    # Find the cost per square foot based on flooring type
+    if flooring_type == 'hardwood':
+        cost_per_sqft = hardwood_cost
+    elif flooring_type == 'carpet':
+        cost_per_sqft = carpet_cost
+    else:
+        cost_per_sqft = tile_cost
+
+    # Return the total cost as area * cost per square foot
+    return area * cost_per_sqft
+
 
 # Run the main function
-if __name__ == "__main__":
-    main()
+main()
