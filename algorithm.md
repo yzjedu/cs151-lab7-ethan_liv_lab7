@@ -45,5 +45,3 @@
   1. Return the total cost as area * cost per square foot.
 
 
-
-
